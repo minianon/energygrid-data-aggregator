@@ -1,10 +1,6 @@
 # High-Level Design (HLD)
 ## EnergyGrid Data Aggregator
 
-**Version**: 1.0  
-**Date**: February 2026  
-**Author**: Tushar Bhardwaj
-
 ---
 
 ## 1. Executive Summary
@@ -23,7 +19,7 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           SYSTEM CONTEXT                                 │
+│                           SYSTEM CONTEXT                                │
 └─────────────────────────────────────────────────────────────────────────┘
 
     ┌─────────────┐                                    ┌─────────────────┐
@@ -33,10 +29,10 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
            │                                                    │
            │ Runs                                          Telemetry
            ▼                                                    │
-    ┌─────────────────────┐      HTTP/REST      ┌───────────────▼────────┐
+    ┌─────────────────────┐      HTTP/REST       ┌──────────────▼────────┐
     │   Data Aggregator   │◄────────────────────►│    EnergyGrid API     │
     │   (Client App)      │     Rate Limited     │    (Legacy System)    │
-    └──────────┬──────────┘                      └────────────────────────┘
+    └──────────┬──────────┘                      └───────────────────────┘
                │
                │ Generates
                ▼
@@ -54,29 +50,29 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                          CLIENT APPLICATION                              │
+│                          CLIENT APPLICATION                             │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
+│                                                                         │
 │   ┌───────────────────────────────────────────────────────────────┐     │
-│   │                    ORCHESTRATION LAYER                         │     │
-│   │                        (index.js)                              │     │
-│   │  • Serial Number Generation                                    │     │
-│   │  • Batch Creation                                              │     │
-│   │  • Progress Tracking                                           │     │
-│   │  • Report Generation                                           │     │
+│   │                    ORCHESTRATION LAYER                        │     │
+│   │                        (index.js)                             │     │
+│   │  • Serial Number Generation                                   │     │
+│   │  • Batch Creation                                             │     │
+│   │  • Progress Tracking                                          │     │
+│   │  • Report Generation                                          │     │
 │   └───────────────────────────────────────────────────────────────┘     │
-│                              │                                           │
+│                              │                                          │
 │              ┌───────────────┼───────────────┐                          │
 │              ▼               ▼               ▼                          │
-│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                 │
-│   │    Result    │  │     Rate     │  │     API      │                 │
-│   │  Aggregator  │  │   Limiter    │  │   Client     │                 │
-│   ├──────────────┤  ├──────────────┤  ├──────────────┤                 │
-│   │ • Collect    │  │ • Queue      │  │ • HTTP POST  │                 │
-│   │ • Statistics │  │ • Throttle   │  │ • Retry      │                 │
-│   │ • Report     │  │ • Delay      │  │ • Error      │                 │
-│   └──────────────┘  └──────────────┘  └──────┬───────┘                 │
-│                                               │                          │
+│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │
+│   │    Result    │  │     Rate     │  │     API      │                  │
+│   │  Aggregator  │  │   Limiter    │  │   Client     │                  │
+│   ├──────────────┤  ├──────────────┤  ├──────────────┤                  │
+│   │ • Collect    │  │ • Queue      │  │ • HTTP POST  │                  │
+│   │ • Statistics │  │ • Throttle   │  │ • Retry      │                  │
+│   │ • Report     │  │ • Delay      │  │ • Error      │                  │
+│   └──────────────┘  └──────────────┘  └───────┬──────┘                  │
+│                                               │                         │
 │                                      ┌────────▼───────┐                 │
 │                                      │   Signature    │                 │
 │                                      │   Generator    │                 │
@@ -84,7 +80,7 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
 │                                      │ • MD5 Hash     │                 │
 │                                      │ • Auth Headers │                 │
 │                                      └────────────────┘                 │
-│                                                                          │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -106,7 +102,7 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
 
 ```
 ┌───────────────────────────────────────────────────────────────────────┐
-│                        REQUEST FLOW DIAGRAM                            │
+│                        REQUEST FLOW DIAGRAM                           │
 └───────────────────────────────────────────────────────────────────────┘
 
      START
@@ -148,10 +144,10 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
     └─────┬──────┘     Body: { sn_list: [...] }         │
           │                                             │
           ▼                                             │
-    ┌────────────┐     ┌────────────┐                  │
-    │  Success?  │─No─►│   Retry    │──────────────────┤
-    │   (200)    │     │  (if 429)  │                  │
-    └─────┬──────┘     └────────────┘                  │
+    ┌────────────┐     ┌────────────┐                   │
+    │  Success?  │─No─►│   Retry    │───────────────────┤
+    │   (200)    │     │  (if 429)  │                   │
+    └─────┬──────┘     └────────────┘                   │
           │Yes                                          │
           ▼                                             │
     ┌────────────┐                                      │
@@ -161,7 +157,7 @@ This document outlines the high-level architecture for the EnergyGrid Data Aggre
           │                                             │
           ▼                                             │
     ┌────────────┐                                      │
-    │   More     │─Yes─────────────────────────────────┘
+    │   More     │─Yes──────────────────────────────────┘
     │  Batches?  │
     └─────┬──────┘
           │No
@@ -271,19 +267,19 @@ QUEUE:  [B1] ─► [B2] ─► [B3] ─► [B4] ─► ... ─► [B50]
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                   SIGNATURE GENERATION                          │
+│                   SIGNATURE GENERATION                         │
 └────────────────────────────────────────────────────────────────┘
 
  URL              TOKEN                TIMESTAMP
    │                │                      │
-   │ "/device/     │ "interview_         │ "1700000000000"
-   │  real/query"  │  token_123"          │
+   │ "/device/      │ "interview_          │ "1700000000000"
+   │  real/query"   │  token_123"          │
    │                │                      │
-   └───────┬───────┴──────────┬───────────┘
+   └───────┬────────┴──────────┬───────────┘
            │                   │
            ▼                   │
-    ┌──────────────┐          │
-    │  Concatenate │◄─────────┘
+    ┌──────────────┐           │
+    │  Concatenate │◄──────────┘
     │    String    │
     └──────┬───────┘
            │
@@ -316,7 +312,7 @@ QUEUE:  [B1] ─► [B2] ─► [B3] ─► [B4] ─► ... ─► [B50]
 ### 8.1 Error Categories
 
 ```
-┌─────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────┐
 │                    ERROR HANDLING MATRIX                     │
 ├──────────────┬────────────────┬──────────────────────────────┤
 │ Error Type   │ HTTP Code      │ Action                       │
