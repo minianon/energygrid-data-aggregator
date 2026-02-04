@@ -1,10 +1,6 @@
 # Low-Level Design (LLD)
 ## EnergyGrid Data Aggregator
 
-**Version**: 1.0  
-**Date**: February 2026  
-**Author**: Tushar Bhardwaj
-
 ---
 
 ## Table of Contents
@@ -504,7 +500,7 @@ Delay Sequence: 2000ms, 4000ms, 8000ms
     │───────────────────────────────────────────────►│
     │               │                │               │
     │               │                │    report     │
-    │◄──────────────────────────────────────────────│
+    │◄───────────────────────────────────────────────│
     │               │                │               │
 ```
 
@@ -527,7 +523,7 @@ Delay Sequence: 2000ms, 4000ms, 8000ms
      │                    │                     │
      │ POST /device/real/query                  │
      │ Headers: timestamp, signature            │
-     │ Body: { sn_list: [...] }                │
+     │ Body: { sn_list: [...] }                 │
      │─────────────────────────────────────────►│
      │                    │                     │
      │                    │    Validate:        │
@@ -535,7 +531,7 @@ Delay Sequence: 2000ms, 4000ms, 8000ms
      │                    │    2. Signature     │
      │                    │    3. Batch size    │
      │                    │                     │
-     │    200 OK { data: [...] }               │
+     │    200 OK { data: [...] }                │
      │◄─────────────────────────────────────────│
      │                    │                     │
 ```
