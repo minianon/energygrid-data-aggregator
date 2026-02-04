@@ -31,9 +31,9 @@ This solution addresses the challenge of fetching telemetry data from a legacy "
 
 ```
 +-------------------------------------------------------------------+
-|                        Client Application                          |
+|                        Client Application                         |
 +-------------------------------------------------------------------+
-|                                                                    |
+|                                                                   |
 |   +--------------+    +--------------+    +--------------+        |
 |   |   index.js   |--->| Rate Limiter |--->|  API Client  |        |
 |   | (Orchestrator|    |  (1 req/sec) |    |   (HTTP)     |        |
@@ -267,12 +267,12 @@ To verify the solution works correctly:
    - All 500 devices in report
    - Server logs show "Success" for all requests
 
+
 ## License
 
-MIT License - Feel free to use and modify.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
 
-**Author**: Tushar Bhardwaj  
-**Assignment**: EnergyGrid Data Aggregator  
-**Language**: Node.js
+## Connect with me
+
+If you’d like to connect, feel free to reach out — [Click here](https://minianonlink.vercel.app/tusharbhardwaj)
